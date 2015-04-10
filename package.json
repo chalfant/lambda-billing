@@ -1,0 +1,19 @@
+{
+  "name": "lambda-billing",
+  "version": "0.0.0",
+  "description": "Lambda function to parse AWS programmatic billing records in S3 and write summary to DynamoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chalfant/lambda-billing.git"
+  },
+  "author": "Chris Chalfant",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0",
+    "csv-parse": "^0.1.0"
+  }
+}
