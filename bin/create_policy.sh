@@ -5,12 +5,16 @@ aws iam create-policy \
   \"Version\": \"2012-10-17\",
   \"Statement\": [
     {
-      \"Sid\": \"Stmt1428698404474\",
       \"Action\": [
         \"s3:GetObject\"
       ],
       \"Effect\": \"Allow\",
-      \"Resource\": \"arn:aws:s3:::$BUCKET_ARN/*\"
+      \"Resource\": \"arn:aws:s3:::$BUCKET/*\"
+    },
+    {
+      \"Action\": [ \"dynamodb:PutItem\" ],
+      \"Effect\": \"Allow\",
+      \"Resource\": \"arn:aws:dynamodb:us-east-1:$AWS_ACCOUNT_ID:table/BillingHistory\"
     }
   ]
 }" \
