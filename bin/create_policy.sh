@@ -10,7 +10,7 @@ aws iam create-policy \
         \"s3:GetObject\"
       ],
       \"Effect\": \"Allow\",
-      \"Resource\": \"arn:aws:s3:::$BUCKET_ARN\"
+      \"Resource\": \"arn:aws:s3:::$BUCKET_ARN/*\"
     }
   ]
 }" \
