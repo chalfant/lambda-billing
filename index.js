@@ -16,6 +16,10 @@ exports.handler = function(event, context) {
   async.waterfall([
     function download(next) {
       console.log("getting " + bucket + "/" + key);
+      if (!key.match(/aws-billing-csv/)) {
+        console.log("skipping file");
+        context.succeed();
+      }
       s3.getObject({ Bucket: bucket, Key: key }, next);
     },
     function parse(response, next) {
@@ -25,7 +29,7 @@ exports.handler = function(event, context) {
           var category = row.ProductCode;
           var fees = row.TotalCost;
 
-          if (row.ItemDescription.match(/^Total statement amount for period/)) {
+          if (row.ItemDescription && row.ItemDescription.match(/^Total statement amount for period/)) {
             category = "Total";
           }
 
@@ -64,8 +68,9 @@ exports.handler = function(event, context) {
   ], function(err) {
     if (err) {
       console.error("Err:", err);
+      context.fail(err);
     } else {
-      context.done();
+      context.succeed();
     }
   });
 };
