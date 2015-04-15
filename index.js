@@ -56,16 +56,16 @@ exports.handler = function(event, context) {
       });
     },
     function writeToDynamo(data, next) {
-      console.log("parsed data:", util.inspect(data));
+      // console.log("parsed data:", util.inspect(data));
       var currentFees = data.Total;
       var percentOfExpected = currentFees / expectedFees * 100;
       var alertLevel = Math.floor(percentOfExpected / 25);
       var timestamp = new Date().toISOString();
 
-      console.log("Total Fees: " + currentFees);
-      console.log("POE:        " + percentOfExpected);
-      console.log("Alert:      " + alertLevel);
-      console.log("Timestamp:  " + timestamp);
+      // console.log("Total Fees: " + currentFees);
+      // console.log("POE:        " + percentOfExpected);
+      // console.log("Alert:      " + alertLevel);
+      // console.log("Timestamp:  " + timestamp);
 
       // build map for categorized fees
       var categorized = {};
@@ -98,7 +98,7 @@ exports.handler = function(event, context) {
         TableName: tableName,
       };
 
-      console.log(util.inspect(params, {depth: 5}));
+      // console.log(util.inspect(params, {depth: 5}));
 
       db.putItem(params, function(err, data) {
         if (err) {
