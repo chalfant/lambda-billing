@@ -67,6 +67,12 @@ exports.handler = function(event, context) {
       console.log("Alert:      " + alertLevel);
       console.log("Timestamp:  " + timestamp);
 
+      // build map for categorized fees
+      var categorized = {};
+      Object.keys(data).forEach(function(key) {
+        categorized[key] = { N: String(data[key]) };
+      });
+
       // setup item params
       var params = {
         Item: {
@@ -85,14 +91,12 @@ exports.handler = function(event, context) {
           ExpectedFees: {
             N: String(expectedFees)
           },
-          // FeesByCategory: {
-          //   M: {}
-          // }
+          FeesByCategory: {
+            M: categorized
+          }
         },
         TableName: tableName,
       };
-
-      // TODO: load params.Item.FeesByCategory.M with category/fees pairs
 
       console.log(util.inspect(params, {depth: 5}));
 
