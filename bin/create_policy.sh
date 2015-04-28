@@ -14,7 +14,7 @@ aws iam create-policy \
     {
       \"Action\": [ \"dynamodb:PutItem\" ],
       \"Effect\": \"Allow\",
-      \"Resource\": \"arn:aws:dynamodb:us-east-1:$AWS_ACCOUNT_ID:table/BillingHistory\"
+      \"Resource\": \"$TABLE_ARN\"
     }
   ]
 }" \

@@ -1,5 +1,5 @@
 #!/bin/bash
 aws iam attach-role-policy \
 --role-name lambda-billing-execution \
---policy-arn $POLICY \
+--policy-arn $POLICY_ARN \
 --profile $AWS_PROFILE

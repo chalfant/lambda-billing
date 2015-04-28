@@ -5,6 +5,6 @@ aws lambda add-permission \
 --statement-id Id-LambdaBilling-AddPermission \
 --action "lambda:InvokeFunction" \
 --principal s3.amazonaws.com \
---source-arn "arn:aws:s3:::$BUCKET_ARN" \
+--source-arn "arn:aws:s3:::$BUCKET" \
 --source-account $AWS_ACCOUNT_ID \
 --profile $AWS_PROFILE

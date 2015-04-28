@@ -1,0 +1,5 @@
+{
+  "expectedFees": 500.0,
+  "awsAccountId": "YourAccountId",
+  "tableName": "BillingHistory"
+}

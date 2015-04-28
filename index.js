@@ -3,10 +3,16 @@ var AWS      = require('aws-sdk');
 var csvParse = require('csv-parse');
 var util     = require('util');
 
-// config
-var expectedFees = 500.0; // your expected monthly fees
-var awsAccountId = "your_account_id"; // used as DynamoDB hash key
-var tableName    = "BillingHistory"; // DynamoDB table name
+function readConfig(s3, bucket, cb) {
+  var params = {
+    Bucket: bucket,
+    Key: "lambda-billing-config.json"
+  };
+  s3.getObject(params, function(err, data) {
+    var results = JSON.parse(data.Body.toString());
+    cb(results);
+  });
+}
 
 var s3 = new AWS.S3();
 var db = new AWS.DynamoDB();
@@ -51,14 +57,18 @@ exports.handler = function(event, context) {
         if (err) {
           next(err);
         } else {
-          next(null, categoryFees);
+          readConfig(s3, bucket, function(data) {
+            categoryFees.config = data;
+            next(null, categoryFees);
+          });
         }
       });
     },
     function writeToDynamo(data, next) {
       // console.log("parsed data:", util.inspect(data));
+      var config = data.config;
       var currentFees = data.Total;
-      var percentOfExpected = currentFees / expectedFees * 100;
+      var percentOfExpected = currentFees / config.expectedFees * 100;
       var alertLevel = Math.floor(percentOfExpected / 25);
       var timestamp = new Date().toISOString();
 
@@ -70,6 +80,9 @@ exports.handler = function(event, context) {
       // build map for categorized fees
       var categorized = {};
       Object.keys(data).forEach(function(key) {
+        if (key === "config") {
+          return;
+        }
         categorized[key] = { N: String(data[key]) };
       });
 
@@ -77,7 +90,7 @@ exports.handler = function(event, context) {
       var params = {
         Item: {
           Account: {
-            S: awsAccountId
+            S: config.awsAccountId
           },
           Timestamp: {
             S: timestamp
@@ -89,13 +102,13 @@ exports.handler = function(event, context) {
             N: String(alertLevel)
           },
           ExpectedFees: {
-            N: String(expectedFees)
+            N: String(config.expectedFees)
           },
           FeesByCategory: {
             M: categorized
           }
         },
-        TableName: tableName,
+        TableName: config.tableName,
       };
 
       // console.log(util.inspect(params, {depth: 5}));
