@@ -1,5 +1,5 @@
 #!/bin/bash
-aws --debug s3api put-bucket-notification-configuration \
+aws s3api put-bucket-notification-configuration \
 --bucket $BUCKET \
 --notification-configuration '{
   "LambdaFunctionConfigurations": [
