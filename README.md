@@ -25,7 +25,7 @@ Get Started
     bin/attach_role_policy.sh
 
     # edit and upload your config
-    aws s3 cp ./config/lambda-billing-config.json s3://$BUCKET/lambda-billing.config.json --profile $AWS_PROFILE
+    aws s3 cp ./config/lambda-billing-config.json s3://$BUCKET/lambda-billing-config.json --profile $AWS_PROFILE
 
     # create lambda function
     export LAMBDA_ROLE_ARN="RoleArnCreatedByCreateRoleScript"
